@@ -6,14 +6,9 @@ import time
 import random
 import back.get_product as gp
 import back.add_product as ap
-
+import back.products as pr
 
 def main(page: ft.Page):
-
-    def buy_button_click(e, product_name):
-                page.snack_bar = ft.SnackBar(ft.Text(f"Товар '{product_name}' добавлен в корзину!"))
-                page.snack_bar.open = True
-                page.update()
 
     def registerBox(e):
         page.remove(log)
@@ -115,69 +110,24 @@ def main(page: ft.Page):
 
                     page.add(profile_container, ft.IconButton(icon=ft.icons.ARROW_BACK, on_click=go_to_main_page))
 
-
             def add_product(e):
                 ap.register_product(product_name_field.value, product_price_field.value, product_stock_quantity.value, product_image_field.value)
                 page.update()
 
             def go_to_main_page(e):
                 page.clean()
-                products = gp.get_product()
-
-                product_cards = []
-                for product in products:
-                    card = ft.Card(
-                        content=ft.Container(
-                            content=ft.Column(
-                                [
-                                    ft.Image(
-                                    src=product["image"],
-                                    width=150,
-                                    height=150,
-                                    fit=ft.ImageFit.CONTAIN,
-                                ),
-                                    ft.Text(product["name"], size=16, weight="bold"),
-                                    ft.Text(f"Цена: {product['price']}", size=14),
-                                    ft.Text(f'B наличии: {product['stock']}', size=14),
-                                    ft.ElevatedButton(
-                                        "Купить",
-                                        on_click=lambda e, pn=product["name"]: buy_button_click(e, pn),
-                                        color="white",
-                                        bgcolor="#6200ea",
-                                        width=120,
-                                        height=40,
-                                    ),
-                                ],
-                                spacing=8,
-                                alignment="center",
-                                horizontal_alignment="center",
-                            ),
-                            padding=10,
-                            width=150,
-                        ),
-                        color="#2e2e2e",
-                        elevation=5,
-                    )
-                    product_cards.append(card)
-
-                    products_grid = ft.GridView(
-                        product_cards,
-                        runs_count=3,
-                        spacing=15,
-                        run_spacing=15,
-                        expand=True,
-                    )
+                products_grid = pr.pdd()
                 page.add(
                     ft.Row(
                         [user_button, add_product_button],
-                        alignment="spaceBetween",
-                    ),
-                    ft.Column(
-                        [ft.Text("Наши товары", size=24, weight="bold", text_align="center")],
-                        alignment="center",
-                    ),
-                    products_grid,
-                )
+                            alignment="spaceBetween",
+                            ),
+                            ft.Column(
+                                [ft.Text("Наши товары", size=24, weight="bold", text_align="center")],
+                                alignment="center",
+                            ),
+                            products_grid,
+                        )
 
 
             def go_to_add(e):
@@ -241,7 +191,6 @@ def main(page: ft.Page):
                                 ft.Text(f'B наличии: {product['stock']}', size=14),
                                 ft.ElevatedButton(
                                     "Купить",
-                                    on_click=lambda e, pn=product["name"]: buy_button_click(e, pn),
                                     color="white",
                                     bgcolor="#6200ea",
                                     width=120,
